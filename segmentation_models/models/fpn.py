@@ -109,6 +109,7 @@ def build_fpn(
         use_batchnorm=True,
         aggregation='sum',
         dropout=None,
+        bias=None,
 ):
     input_ = backbone.input
     x = backbone.output
@@ -158,6 +159,7 @@ def build_fpn(
         padding='same',
         use_bias=True,
         kernel_initializer='glorot_uniform',
+        bias_initializer=tf.keras.initializers.Constant(value=bias),
         name='head_conv',
     )(x)
     x = layers.Activation(activation, name=activation)(x)
@@ -185,6 +187,7 @@ def FPN(
         pyramid_use_batchnorm=True,
         pyramid_aggregation='concat',
         pyramid_dropout=None,
+        bias=None,
         **kwargs
 ):
     """FPN_ is a fully convolution neural network for image semantic segmentation
@@ -241,6 +244,7 @@ def FPN(
         activation=activation,
         classes=classes,
         aggregation=pyramid_aggregation,
+        bias=bias,
     )
 
     # lock encoder weights for fine-tuning
